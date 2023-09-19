@@ -14,18 +14,19 @@ def ask_agent(query, openai_api_key, sys_path, model='gpt-3.5-turbo-16k'):
     '''Display the answer to a question.'''
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
-    new_db1 = FAISS.load_local(
-        f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_4096',
-        embeddings)
+    # new_db1 = FAISS.load_local(
+    #     f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_4096',
+    #     embeddings)
     new_db2 = FAISS.load_local(
-        f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_512',
-        embeddings)
-    new_db3 = FAISS.load_local(f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096',
-                             embeddings)
+         f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_512',
+         embeddings)
+    
+    # new_db3 = FAISS.load_local(f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096',
+    #                          embeddings)
 
-    new_db1.merge_from(new_db2)
-    new_db1.merge_from(new_db3)
-    new_db = new_db1
+    # new_db1.merge_from(new_db2)
+    # new_db1.merge_from(new_db3)
+    new_db = new_db2
 
     retriever = new_db.as_retriever()
 
