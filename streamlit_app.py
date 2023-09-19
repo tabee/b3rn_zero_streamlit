@@ -8,7 +8,7 @@ SYS_PATH_LOCAL = '/workspaces/b3rn_zero_streamlit'
 SYS_PATH_STREAMLIT = '/mount/src/b3rn_zero_streamlit/'
 SYS_PATH = SYS_PATH_STREAMLIT
 
-st.title('🤖 B3rn Zero Chat')
+st.title('🤖 B3rn Zero Chat 0.0.1')
 
 openai_api_key = st.sidebar.text_input(
     'OpenAI API Key',

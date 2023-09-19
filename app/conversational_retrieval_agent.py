@@ -20,11 +20,11 @@ def ask_agent(query, openai_api_key, sys_path, model='gpt-3.5-turbo-16k'):
     new_db2 = FAISS.load_local(
         f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_512',
         embeddings)
-    # new_db3 = FAISS.load_local(f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096',
-    #                         embeddings)
+    new_db3 = FAISS.load_local(f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096',
+                             embeddings)
 
     new_db1.merge_from(new_db2)
-    # new_db1.merge_from(new_db3)
+    new_db1.merge_from(new_db3)
     new_db = new_db1
 
     retriever = new_db.as_retriever()
