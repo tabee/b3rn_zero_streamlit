@@ -10,7 +10,7 @@ from langchain.vectorstores import FAISS
 from langchain.callbacks import get_openai_callback
 
 
-def ask_agent(query, openai_api_key, sys_path, model='gpt-3.5-turbo-16k'):
+def ask_agent(query, openai_api_key, sys_path, model='gpt-4'):
     '''Display the answer to a question.'''
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
