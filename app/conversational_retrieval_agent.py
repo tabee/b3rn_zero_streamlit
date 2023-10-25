@@ -1,6 +1,3 @@
-''' 
-https://python.langchain.com/docs/use_cases/
-question_answering/how_to/conversational_retrieval_agents  '''
 from langchain.agents.agent_toolkits import (
     create_conversational_retrieval_agent, create_retriever_tool)
 from langchain.chat_models import ChatOpenAI
