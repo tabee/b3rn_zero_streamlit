@@ -7,7 +7,7 @@ from langchain.vectorstores import FAISS
 from langchain.callbacks import get_openai_callback
 
 
-def ask_agent(query, openai_api_key, sys_path, model='gpt-4'):
+def ask_agent__eak(query, openai_api_key, sys_path, model='gpt-4'):
     '''Display the answer to a question.'''
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
@@ -55,6 +55,80 @@ def ask_agent(query, openai_api_key, sys_path, model='gpt-4'):
         - If you don't know an answer, state: "No source available, thus no answer possible".
         - Never invent URLs. Only use URLs from eak_admin_website.
         - Always respond in German.
+        """
+    )
+
+    llm = ChatOpenAI(openai_api_key=openai_api_key,
+                     model=model,
+                     temperature=0,
+                     n=10,
+                     verbose=True)
+
+    agent_executor = create_conversational_retrieval_agent(
+        llm, 
+        tools, 
+        verbose=False, 
+        system_message=system_message,
+        max_token_limit=3000) # heikel
+ 
+    print(f"\nFrage: {query}")
+    with get_openai_callback() as callback:
+        answer = agent_executor({"input": query})
+        print(f"\nAntwort: {answer['output']}\n\n")
+        print(f"Total Tokens: {callback.total_tokens}")
+        print(f"Prompt Tokens: {callback.prompt_tokens}")
+        print(f"Completion Tokens: {callback.completion_tokens}")
+        print(f"Total Cost (USD): ${callback.total_cost}")
+    return answer
+
+
+def ask_agent__chch(query, openai_api_key, sys_path, model='gpt-4'):
+    '''Display the answer to a question.'''
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+
+    # new_db1 = FAISS.load_local(
+    #     f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_4096',
+    #     embeddings)
+    # new_db2 = FAISS.load_local(
+    #      f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_512',
+    #      embeddings)
+    
+    new_db3 = FAISS.load_local(
+        f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096', 
+        embeddings)
+
+    # new_db1.merge_from(new_db2)
+    # new_db1.merge_from(new_db3)
+    new_db = new_db3
+
+    retriever = new_db.as_retriever()
+
+    tool = create_retriever_tool(
+        retriever,
+        "content_of_chch_website",
+        """
+        This tool is designed for an LLM that interacts with 
+        the content of the ch.ch website to retrieve documents. 
+        The chch acts as a information hub for various federal entities. 
+        A service of the Confederation, cantons and communes.
+        The tool offers services related to:
+        "Easy answers about life in Switzerland"
+        The ch.ch portal is an information platform provided by 
+        the Swiss authorities. In just a few clicks, you will find 
+        straightforward answers in five languages to questions 
+        that many of you ask the authorities.
+        """
+    )
+    tools = [tool]
+
+    system_message = SystemMessage(
+        content="""
+        You are an expert on the chch_website and:
+        - Always answer questions by citing the source.
+        - The source is the URL you receive as an answer from the content_of_chch_website tool.
+        - If you do not know an answer, indicate "No source available, therefore no answer possible".
+        - Never make up URLs. Only use URLs from the content_of_chch_website.
+        - Always answer in German.
         """
     )
 
