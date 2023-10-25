@@ -16,8 +16,8 @@ openai_api_key = st.sidebar.text_input(
     value='',
     type='password')
 optimize_input = st.sidebar.toggle('Optimizing question')
-ask_eak = st.sidebar.toggle('Ask 👴', value=True)
-ask_ch = st.sidebar.toggle('Ask 🍫', value=True)
+ask_eak = st.sidebar.toggle('Ask eak 👴', value=True)
+ask_ch = st.sidebar.toggle('Ask ch🍫', value=True)
 
 def generate_response(input_text):
     """ Generate response from input text. """
@@ -56,10 +56,10 @@ if prompt:
         st.write(prompt)
 
     if not optimize_input:
-        with st.chat_message("System"):
+        with st.chat_message("System", avatar="🧙‍♂️"):
             st.write('Optimizing question deactivated.')
     if not openai_api_key.startswith('sk-'):
-        with st.chat_message("System"):
-            st.write('Please enter your OpenAI API key!')
+        with st.chat_message("System", avatar="🧙‍♂️"):
+            st.write('Please enter your OpenAI API key! Navigate to the openai website to get one.')
     if openai_api_key.startswith('sk-'):
         generate_response(prompt)

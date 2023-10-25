@@ -1,29 +1,25 @@
+import langchain
 from langchain.agents.agent_toolkits import (
     create_conversational_retrieval_agent, create_retriever_tool)
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema.messages import SystemMessage
 from langchain.vectorstores import FAISS
+from langchain.cache import SQLiteCache
 from langchain.callbacks import get_openai_callback
 
+SYS_PATH_LOCAL = '/workspaces/b3rn_zero_streamlit'
+SYS_PATH_STREAMLIT = '/app/b3rn_zero_streamlit/'
+SYS_PATH = SYS_PATH_STREAMLIT
+langchain.llm_cache = SQLiteCache(database_path=f"{SYS_PATH}/data/langchain_cache.db")
 
 def ask_agent__eak(query, openai_api_key, sys_path, model='gpt-4'):
     '''Display the answer to a question.'''
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
-    new_db1 = FAISS.load_local(
+    new_db = FAISS.load_local(
         f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_4096',
         embeddings)
-    # new_db2 = FAISS.load_local(
-    #      f'{sys_path}/data/vectorstores/eak_admin_ch_defaultdocs_faiss_index_512',
-    #      embeddings)
-    
-    # new_db3 = FAISS.load_local(f'{sys_path}/data/vectorstores/ch_ch_texts_faiss_index_4096',
-    #                          embeddings)
-
-    # new_db1.merge_from(new_db2)
-    # new_db1.merge_from(new_db3)
-    new_db = new_db1
 
     retriever = new_db.as_retriever()
 
@@ -167,4 +163,4 @@ if __name__ == "__main__":
     for question in QUESTIONS:
         OPENAPI_API_KEY = "YOUR_API_KEY"
         SYS_PATH = "YOUR_SYSTEM_PATH"
-        ask_agent(question, OPENAPI_API_KEY, SYS_PATH)
+        ask_agent__eak(question, OPENAPI_API_KEY, SYS_PATH)

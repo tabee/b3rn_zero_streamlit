@@ -1,14 +1,21 @@
 ''' This chain is used to optimize the question by using the content of the question. '''
 import os
+import langchain
 from langchain import PromptTemplate, LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
+from langchain.cache import SQLiteCache
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
+
+SYS_PATH_LOCAL = '/workspaces/b3rn_zero_streamlit'
+SYS_PATH_STREAMLIT = '/app/b3rn_zero_streamlit/'
+SYS_PATH = SYS_PATH_STREAMLIT
+langchain.llm_cache = SQLiteCache(database_path=f"{SYS_PATH}/data/langchain_cache.db")
 
 system_message_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
